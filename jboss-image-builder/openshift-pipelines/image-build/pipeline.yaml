@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: jboss-image-config-pipeline
-  namespace: example-jboss
+  namespace: jboss-example
 spec:
   tasks:
   - name: git-clone
