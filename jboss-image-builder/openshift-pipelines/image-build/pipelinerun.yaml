@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: jboss-image-pipeline-run
+spec:
+  pipelineRef:
+    name: jboss-image-config-pipeline
+  serviceAccountName: pipeline
+  params:
+    # - name: url
+    #   value: 'git url'
+    - name: IMAGE
+      value: 'quay.apps.ocp4.example.com/jboss-example'
+  workspaces:
+    # - name: shared-workspace
+    #   volumeClaimTemplate:
+    #     spec:
+    #       accessModes:
+    #         - ReadWriteOnce
+    #       resources:
+    #         requests:
+    #           storage: 1Gi
+    - name: workspace-jboss
+      emptyDir: {}

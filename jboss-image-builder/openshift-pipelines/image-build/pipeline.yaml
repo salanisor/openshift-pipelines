@@ -1,0 +1,50 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: jboss-image-config-pipeline
+  namespace: example-jboss
+spec:
+  tasks:
+  - name: git-clone
+    params:
+    - name: url
+      value: https://github.com/salanisor/openshift-pipelines.git
+    taskRef:
+      kind: ClusterTask
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: workspace-jboss
+  - name: buildah-bud-and-push
+    params:
+      - name: IMAGE
+        value: jboss74
+      - name: BUILDER_IMAGE
+        value: >-
+          registry.redhat.io/rhel9/buildah
+      - name: STORAGE_DRIVER
+        value: vfs
+      - name: DOCKERFILE
+        value: 'jboss-image-builder/Dockerfile'
+      - name: CONTEXT
+        value: .
+      - name: TLSVERIFY
+        value: 'false'
+      - name: FORMAT
+        value: oci
+      - name: BUILD_EXTRA_ARGS
+        value: ''
+      - name: PUSH_EXTRA_ARGS
+        value: ''
+      - name: SKIP_PUSH
+        value: 'false'
+    runAfter:
+      - git-clone
+    taskRef:
+      kind: ClusterTask
+      name: buildah
+    workspaces:
+      - name: source
+        workspace: workspace-jboss
+  workspaces:
+  - name: workspace
