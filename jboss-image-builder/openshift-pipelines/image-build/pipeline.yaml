@@ -4,21 +4,62 @@ metadata:
   name: jboss-image-config-pipeline
   namespace: jboss-example
 spec:
+  workspaces:
+  - name: workspace-jboss
+  params:
+  - name: image-tag
+    type: string
+    description: version of the newly built image
+  - name: URL
+    type: string
+    description: url of the git repo for the code of deployment
+    default: https://github.com/redhat-developer-demos/qotd.git
+  - name: IMAGE
+    type: string
+    description: image to be built from the code
+    default: image-registry.openshift-image-registry.svc:5000/jboss-example/jboss-image:latest
+  - name: git-revision
+    type: string
+    description: revision to be used from repo of the code for deployment
+    default: main
   tasks:
   - name: git-clone
-    params:
-    - name: url
-      value: https://github.com/salanisor/openshift-pipelines.git
     taskRef:
-      kind: ClusterTask
-      name: git-clone
+      resolver: cluster
+      params:
+      - name: namespace
+        value: openshift-pipelines
+      - name: kind
+        value: task
+      - name: name
+        value: git-clone
+    params:
+    - name: URL
+      value: $(params.URL)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+    - name: REVISION
+      value: $(params.git-revision)
     workspaces:
     - name: output
       workspace: workspace-jboss
   - name: buildah-bud-and-push
+    runAfter:
+      - git-clone
+    taskRef:
+      resolver: cluster
+      params:
+      - name: namespace
+        value: openshift-pipelines
+      - name: kind
+        value: task
+      - name: name
+        value: buildah
     params:
       - name: IMAGE
-        value: jboss74
+        value: $(params.IMAGE):$(params.image-tag)
       - name: BUILDER_IMAGE
         value: >-
           registry.redhat.io/rhel9/buildah
@@ -38,13 +79,6 @@ spec:
         value: ''
       - name: SKIP_PUSH
         value: 'false'
-    runAfter:
-      - git-clone
-    taskRef:
-      kind: ClusterTask
-      name: buildah
     workspaces:
       - name: source
         workspace: workspace-jboss
-  workspaces:
-  - name: workspace

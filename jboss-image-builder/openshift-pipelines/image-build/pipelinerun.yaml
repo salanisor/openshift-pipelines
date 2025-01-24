@@ -7,18 +7,25 @@ spec:
     name: jboss-image-config-pipeline
   serviceAccountName: pipeline
   params:
-    # - name: url
-    #   value: 'git url'
+    - name: URL
+      value: https://github.com/salanisor/openshift-pipelines.git
     - name: IMAGE
       value: 'quay.apps.ocp4.example.com/jboss-example'
+    - name: image-tag
+      value: '001'
   workspaces:
-    # - name: shared-workspace
+    # - name: workspace-jboss
     #   volumeClaimTemplate:
     #     spec:
+    #       storageClassName: local-filesystem
     #       accessModes:
     #         - ReadWriteOnce
     #       resources:
     #         requests:
     #           storage: 1Gi
+    # - name: workspace-jboss
+    #   emptyDir: {}
+  workspaces:
     - name: workspace-jboss
-      emptyDir: {}
+      persistentVolumeClaim:
+        claimName: jboss-example-pvc
