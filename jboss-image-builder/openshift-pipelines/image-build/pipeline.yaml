@@ -39,7 +39,7 @@ spec:
     - name: subdirectory
       value: ""
     - name: deleteExisting
-      value: "true"
+      value: "false"
     - name: REVISION
       value: $(params.git-revision)
     workspaces:
@@ -70,7 +70,7 @@ spec:
       - name: CONTEXT
         value: .
       - name: TLSVERIFY
-        value: 'false'
+        value: "false"
       - name: FORMAT
         value: oci
       - name: BUILD_EXTRA_ARGS
