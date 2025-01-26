@@ -13,6 +13,8 @@ spec:
       value: 'quay.apps.ocp4.example.com/jboss-example'
     - name: image-tag
       value: '001'
+    - name: TLS_VERIFY
+      value: "false"
   workspaces:
     # - name: workspace-jboss
     #   volumeClaimTemplate:

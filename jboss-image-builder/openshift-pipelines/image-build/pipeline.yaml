@@ -22,6 +22,9 @@ spec:
     type: string
     description: revision to be used from repo of the code for deployment
     default: main
+  - name: TLS_VERIFY
+    type: string
+    description: Sets the TLS verification flag, `true` is recommended.
   tasks:
   - name: git-clone
     taskRef:
@@ -69,8 +72,8 @@ spec:
         value: 'jboss-image-builder/Dockerfile'
       - name: CONTEXT
         value: .
-      - name: TLSVERIFY
-        value: "false"
+      - name: TLS_VERIFY
+        value: $(params.TLS_VERIFY)
       - name: FORMAT
         value: oci
       - name: BUILD_EXTRA_ARGS
