@@ -10,7 +10,7 @@ spec:
     - name: URL
       value: https://github.com/salanisor/openshift-pipelines.git
     - name: IMAGE
-      value: 'quay.apps.ocp4.example.com/jboss-example'
+      value: 'quay.apps.ocp4.example.com/jboss-example/jboss-build'
     - name: image-tag
       value: '001'
     - name: TLS_VERIFY
