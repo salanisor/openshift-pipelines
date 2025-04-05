@@ -1,0 +1,4 @@
+# https://hub.tekton.dev/tekton/task/ansible-runner
+# official documentation.
+kubectl apply --filename https://api.hub.tekton.dev/v1/resource/tekton/task/ansible-runner/0.2/raw
+
