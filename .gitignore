@@ -38,3 +38,6 @@ venv/
 .env
 .env.local
 ```
+
+# Ignore ~/.ssh
+~/.ssh/

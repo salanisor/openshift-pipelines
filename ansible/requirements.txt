@@ -1,0 +1,7 @@
+# https://pypi.org/project/pipdeptree/
+# https://console.redhat.com/openshift/create/local
+# 1) Select to download the OpenShift Local binary locally.
+# 2) Download pull secret locally.
+# 3) Run crc setup / start
+curl -O https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz
+
