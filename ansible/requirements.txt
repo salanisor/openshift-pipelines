@@ -3,5 +3,8 @@
 # 1) Select to download the OpenShift Local binary locally.
 # 2) Download pull secret locally.
 # 3) Run crc setup / start
-curl -O https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz
-
+# curl -O https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz
+# https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
+python3 -m pip install --upgrade pip
+python3 -m pip --version
+python3 -m pip install requests

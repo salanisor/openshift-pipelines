@@ -124,6 +124,12 @@ Now that the `tkn` CLI is installed, you can use Python to interact with Tekton 
    pip install requests
    ```
 
+   Alternatively, run
+
+   ```bash
+   bash openshift-pipelines/ansible/requirements.txt
+   ```
+
 4. **Deactivate the Virtual Environment**:
    When you're done working, deactivate the virtual environment:
    ```bash
