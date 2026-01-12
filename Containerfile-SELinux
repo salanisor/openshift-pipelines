@@ -1,0 +1,39 @@
+# Dockerfile.ubi8-openshift-selinux
+FROM registry.redhat.io/ubi8/ubi-minimal:latest
+
+# Update and install SELinux
+RUN microdnf update -y && \
+    microdnf install -y \
+    selinux-policy \
+    selinux-policy-targeted \
+    policycoreutils \
+    container-selinux \
+    && microdnf clean all
+
+# Configure for OpenShift
+RUN echo "SELINUX=enforcing" > /etc/selinux/config && \
+    echo "SELINUXTYPE=targeted" >> /etc/selinux/config
+
+# Install OpenShift specific SELinux policies
+RUN if [ -f /usr/share/selinux/targeted/container.pp ]; then \
+        semodule -i /usr/share/selinux/targeted/container.pp; \
+    fi
+
+# Set up for restricted SCC (Security Context Constraints)
+RUN mkdir -p /app && \
+    chgrp -R 0 /app && \
+    chmod -R g=u /app && \
+    chmod g+x /app
+
+# Create user for OpenShift
+RUN useradd -u 1001 -r -g 0 -s /sbin/nologin -c "Default Application User" default
+
+# Set proper contexts for OpenShift
+RUN chcon -R -t container_file_t /app 2>/dev/null || true && \
+    chcon -R -u system_u -r object_r -t container_file_t /app 2>/dev/null || true
+
+# Clean up
+RUN rm -rf /var/cache/yum /tmp/* /var/tmp/*
+
+USER 1001
+WORKDIR /app
