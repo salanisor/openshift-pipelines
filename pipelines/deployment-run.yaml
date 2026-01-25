@@ -12,17 +12,8 @@ spec:
       value: 'Containerfile-SELinux'
     - name: URL
       value: https://github.com/salanisor/openshift-pipelines.git
-    - name: IMAGE
-      value: 'quay.apps.ocp4.keights.org/openshift/base-images'
-    - name: image-tag
-      value: 'ubi8-minimal-latest'
-    - name: TLS_VERIFY
-      value: "false"
     - name: git-revision
       value: learn
-    - name: BUILDER_IMAGE
-      value: >-
-        'registry.redhat.io/ubi8/ubi-minimal:latest'
     - name: SCRIPT
       value: 'oc apply -f manifests/'
   workspaces:
@@ -30,7 +21,7 @@ spec:
       persistentVolumeClaim:
         claimName: pipeline-pvc
   taskRunSpecs:
-    - pipelineTaskName: deploy-to-namespace
+    - pipelineTaskName: deploy-pipeline
       stepSpecs:
         - name: oc
           computeResources:
