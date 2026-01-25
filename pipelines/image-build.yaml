@@ -25,6 +25,15 @@ spec:
   - name: TLS_VERIFY
     type: string
     description: Sets the TLS verification flag, `true` is recommended.
+    default: "false"
+  - name: DOCKERFILE
+    type: string
+    description: Path to the Dockerfile to build
+    default: Dockerfile
+  - name: BUILDER_IMAGE
+    type: string
+    description: The image used to build the container
+    default: registry.redhat.io/rhel9/buildah
   tasks:
   - name: git-clone
     taskRef:
@@ -64,12 +73,11 @@ spec:
       - name: IMAGE
         value: $(params.IMAGE):$(params.image-tag)
       - name: BUILDER_IMAGE
-        value: >-
-          registry.redhat.io/rhel9/buildah
+        value: $(params.BUILDER_IMAGE)
       - name: STORAGE_DRIVER
         value: vfs
       - name: DOCKERFILE
-        value: 'jboss-image-builder/Dockerfile'
+        value: $(params.DOCKERFILE)
       - name: CONTEXT
         value: .
       - name: TLS_VERIFY
@@ -82,16 +90,26 @@ spec:
         value: ''
       - name: SKIP_PUSH
         value: 'false'
-  - name: deploy-to-namespace
-    runAfter:
-      - buildah-bud-and-push
-    taskRef:
-      resolver: cluster
-      params:
-        - name: ARGS
-          value:
-            - apply -f 
-            - ded
     workspaces:
       - name: source
         workspace: workspace-build
+  # Note: The deploy-to-namespace task is commented out because it's incomplete
+  # You'll need to specify which task to use (e.g., kubectl, oc) and provide proper parameters
+  # - name: deploy-to-namespace
+  #   runAfter:
+  #     - buildah-bud-and-push
+  #   taskRef:
+  #     resolver: cluster
+  #     params:
+  #       - name: namespace
+  #         value: openshift-pipelines
+  #       - name: kind
+  #         value: task
+  #       - name: name
+  #         value: openshift-client  # or kubectl
+  #   params:
+  #     - name: SCRIPT
+  #       value: oc apply -f your-deployment.yaml
+  #   workspaces:
+  #     - name: manifest-dir
+  #       workspace: workspace-build
