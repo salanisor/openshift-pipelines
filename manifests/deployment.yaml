@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubi8-minimal-app
+  namespace: pipelines
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubi8-minimal-app
+  template:
+    metadata:
+      labels:
+        app: ubi8-minimal-app
+    spec:
+      containers:
+      - name: app
+        image: quay.apps.ocp4.keights.org/openshift/base-images:ubi8-minimal-latest
+        command: ["/bin/sh", "-c"]
+        args: ["echo 'Deployed via Tekton!'; sleep 3600"]
+        imagePullPolicy: Always
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 0
