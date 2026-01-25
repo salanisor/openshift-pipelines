@@ -107,7 +107,7 @@ spec:
           value: openshift-client
     params:
       - name: SCRIPT
-        value: 'oc apply -f manifests/'
+        value: $(params.SCRIPT)
     workspaces:
       - name: manifest-dir
         workspace: workspace-build
