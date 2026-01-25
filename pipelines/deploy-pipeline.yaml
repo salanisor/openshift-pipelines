@@ -38,6 +38,28 @@ spec:
     type: string
     description: The image used to build the container
   tasks:
+  - name: git-clone
+    taskRef:
+      resolver: cluster
+      params:
+      - name: namespace
+        value: openshift-pipelines
+      - name: kind
+        value: task
+      - name: name
+        value: git-clone
+    params:
+    - name: URL
+      value: $(params.URL)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "false"
+    - name: REVISION
+      value: $(params.git-revision)
+    workspaces:
+    - name: output
+      workspace: workspace-build
   - name: deploy-to-namespace
     taskRef:
       resolver: cluster
