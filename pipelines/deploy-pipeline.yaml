@@ -36,7 +36,7 @@ spec:
     default: registry.redhat.io/rhel9/buildah
   - name: SCRIPT
     type: string
-    description: The image used to build the container
+    description: The OpenShift CLI script to execute
   tasks:
   - name: git-clone
     taskRef:
@@ -61,6 +61,8 @@ spec:
     - name: output
       workspace: workspace-build
   - name: deploy-to-namespace
+    runAfter:
+      - git-clone
     taskRef:
       resolver: cluster
       params:
@@ -74,5 +76,5 @@ spec:
       - name: SCRIPT
         value: $(params.SCRIPT)
     workspaces:
-      - name: manifest_dir
+      - name: manifest-dir
         workspace: workspace-build
