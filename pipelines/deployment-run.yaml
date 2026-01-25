@@ -29,3 +29,12 @@ spec:
     - name: workspace-build
       persistentVolumeClaim:
         claimName: pipeline-pvc
+  taskRunSpecs:
+    - pipelineTaskName: deploy-to-namespace
+      stepSpecs:
+        - name: oc
+          computeResources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+          image: registry.redhat.io/openshift4/ose-cli:latest

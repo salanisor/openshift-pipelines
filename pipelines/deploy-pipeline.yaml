@@ -73,10 +73,6 @@ spec:
     params:
       - name: SCRIPT
         value: $(params.SCRIPT)
-    taskRunSpec:
-      stepOverrides:
-        - name: oc
-          image: registry.redhat.io/openshift4/ose-cli:latest
     workspaces:
       - name: manifest_dir
         workspace: workspace-build
