@@ -8,6 +8,8 @@ spec:
     name: base-image-config-pipeline
   serviceAccountName: pipeline
   params:
+    - name: DOCKERFILE
+      value: 'Containerfile-SELinux'
     - name: URL
       value: https://github.com/salanisor/openshift-pipelines.git
     - name: IMAGE
@@ -21,7 +23,7 @@ spec:
     - name: BUILDER_IMAGE
       value: >-
         'registry.redhat.io/ubi8/ubi-minimal:latest'
-  workspaces:
+# workspaces:
     # - name: workspace-jboss
     #   volumeClaimTemplate:
     #     spec:
@@ -34,6 +36,6 @@ spec:
     # - name: workspace-jboss
     #   emptyDir: {}
   workspaces:
-    - name: workspace-pipeline
+    - name: workspace-build
       persistentVolumeClaim:
         claimName: pipeline-pvc

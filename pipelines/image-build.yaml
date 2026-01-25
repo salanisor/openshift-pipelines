@@ -13,7 +13,7 @@ spec:
   - name: URL
     type: string
     description: url of the git repo for the code of deployment
-    default: https://github.com/redhat-developer-demos/qotd.git
+    default: https://github.com/salanisor/openshift-pipelines.git
   - name: IMAGE
     type: string
     description: image to be built from the code
@@ -82,6 +82,16 @@ spec:
         value: ''
       - name: SKIP_PUSH
         value: 'false'
+  - name: deploy-to-namespace
+    runAfter:
+      - buildah-bud-and-push
+    taskRef:
+      resolver: cluster
+      params:
+        - name: ARGS
+          value:
+            - apply -f 
+            - ded
     workspaces:
       - name: source
         workspace: workspace-build
