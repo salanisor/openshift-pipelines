@@ -21,7 +21,7 @@ spec:
       persistentVolumeClaim:
         claimName: pipeline-pvc
   taskRunSpecs:
-    - pipelineTaskName: deploy-pipeline
+    - pipelineTaskName: deploy-to-namespace
       stepSpecs:
         - name: oc
           computeResources:
