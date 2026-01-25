@@ -52,5 +52,5 @@ spec:
       - name: SCRIPT
         value: $(params.SCRIPT)
     workspaces:
-      - name: manifest-dir
+      - name: manifest_dir
         workspace: workspace-build
