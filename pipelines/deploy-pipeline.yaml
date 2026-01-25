@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: deploy-pipeline
+  namespace: pipelines
+spec:
+  workspaces:
+  - name: workspace-build
+  params:
+  - name: image-tag
+    type: string
+    description: version of the newly built image
+  - name: URL
+    type: string
+    description: url of the git repo for the code of deployment
+    default: https://github.com/salanisor/openshift-pipelines.git
+  - name: IMAGE
+    type: string
+    description: image to be built from the code
+    default: quay.apps.ocp4.keights.org/openshift/base-images:ubi8-minimal-latest
+  - name: git-revision
+    type: string
+    description: revision to be used from repo of the code for deployment
+    default: main
+  - name: TLS_VERIFY
+    type: string
+    description: Sets the TLS verification flag, `true` is recommended.
+    default: "false"
+  - name: DOCKERFILE
+    type: string
+    description: Path to the Dockerfile to build
+    default: Dockerfile
+  - name: BUILDER_IMAGE
+    type: string
+    description: The image used to build the container
+    default: registry.redhat.io/rhel9/buildah
+  - name: SCRIPT
+    type: string
+    description: The image used to build the container
+  tasks:
+  - name: deploy-to-namespace
+    taskRef:
+      resolver: cluster
+      params:
+        - name: namespace
+          value: openshift-pipelines
+        - name: kind
+          value: task
+        - name: name
+          value: openshift-client
+    params:
+      - name: SCRIPT
+        value: 'oc apply -f manifests/'
+    workspaces:
+      - name: manifest-dir
+        workspace: workspace-build

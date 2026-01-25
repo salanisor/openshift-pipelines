@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: base-image-pipeline-run
+  name: deploy-run
   namespace: pipelines
 spec:
   pipelineRef:
