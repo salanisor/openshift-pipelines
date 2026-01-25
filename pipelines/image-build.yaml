@@ -93,23 +93,21 @@ spec:
     workspaces:
       - name: source
         workspace: workspace-build
-  # Note: The deploy-to-namespace task is commented out because it's incomplete
-  # You'll need to specify which task to use (e.g., kubectl, oc) and provide proper parameters
-  # - name: deploy-to-namespace
-  #   runAfter:
-  #     - buildah-bud-and-push
-  #   taskRef:
-  #     resolver: cluster
-  #     params:
-  #       - name: namespace
-  #         value: openshift-pipelines
-  #       - name: kind
-  #         value: task
-  #       - name: name
-  #         value: openshift-client  # or kubectl
-  #   params:
-  #     - name: SCRIPT
-  #       value: oc apply -f your-deployment.yaml
-  #   workspaces:
-  #     - name: manifest-dir
-  #       workspace: workspace-build
+  - name: deploy-to-namespace
+    runAfter:
+      - buildah-bud-and-push
+    taskRef:
+      resolver: cluster
+      params:
+        - name: namespace
+          value: openshift-pipelines
+        - name: kind
+          value: task
+        - name: name
+          value: openshift-client
+    params:
+      - name: SCRIPT
+        value: oc apply -f your-deployment.yaml
+    workspaces:
+      - name: manifest-dir
+        workspace: workspace-build
