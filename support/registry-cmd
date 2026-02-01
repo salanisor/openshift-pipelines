@@ -1,0 +1,5 @@
+oc patch configs.imageregistry.operator.openshift.io cluster --type=merge -p '{"spec":{"rolloutStrategy":"Recreate"}}'
+sleep 2
+oc patch configs.imageregistry.operator.openshift.io cluster --type=merge -p '{"spec":{"managementState":"Managed"}}'
+sleep 2
+oc patch configs.imageregistry.operator.openshift.io cluster --type=merge -p '{"spec":{"storage":{"pvc":{"claim":"image-registry-storage"}}}}'

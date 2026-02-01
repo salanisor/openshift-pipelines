@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: base-image-pipeline-run
+  namespace: pipelines
+spec:
+  pipelineRef:
+    name: deploy-pipeline
+  serviceAccountName: pipeline
+  params:
+    - name: DOCKERFILE
+      value: 'Containerfile-SELinux'
+    - name: URL
+      value: https://github.com/salanisor/openshift-pipelines.git
+    - name: IMAGE
+      value: 'quay.apps.ocp4.keights.org/openshift/base-images'
+    - name: image-tag
+      value: 'ubi8-minimal-latest'
+    - name: TLS_VERIFY
+      value: "false"
+    - name: git-revision
+      value: learn
+    - name: BUILDER_IMAGE
+      value: >-
+        'registry.redhat.io/ubi8/ubi-minimal:latest'
+  workspaces:
+    - name: workspace-build
+      persistentVolumeClaim:
+        claimName: pipeline-pvc

@@ -1,0 +1,14 @@
+# registry-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: image-registry-storage
+  namespace: openshift-image-registry
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi  # Adjust as needed
+  # Optional: specify storage class
+  # storageClassName: your-storage-class
