@@ -26,7 +26,7 @@ RUN mkdir -p /app && \
     chmod g+x /app
 
 # Create user for OpenShift
-RUN useradd -u 1001 -r -g 0 -s /sbin/nologin -c "Default Application User" default
+#RUN useradd -u 1001 -r -g 0 -s /sbin/nologin -c "Default Application User" default
 
 # Set proper contexts for OpenShift
 RUN chcon -R -t container_file_t /app 2>/dev/null || true && \
@@ -35,5 +35,10 @@ RUN chcon -R -t container_file_t /app 2>/dev/null || true && \
 # Clean up
 RUN rm -rf /var/cache/yum /tmp/* /var/tmp/*
 
-USER 1001
+# Optional: Add metadata labels
+LABEL name="ubi8-selinux-base" \
+      version="1.0" \
+      description="UBI8 minimal with SELinux awareness for OpenShift"
+
+#USER 1001
 WORKDIR /app

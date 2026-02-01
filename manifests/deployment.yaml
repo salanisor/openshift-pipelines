@@ -14,6 +14,8 @@ spec:
       labels:
         app: ubi8-minimal-app
     spec:
+      imagePullSecrets:
+        - name: quay-registry-creds
       containers:
       - name: app
         image: quay.apps.ocp4.keights.org/openshift/base-images:ubi8-minimal-latest
@@ -22,5 +24,3 @@ spec:
         imagePullPolicy: Always
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1001
-        fsGroup: 0
