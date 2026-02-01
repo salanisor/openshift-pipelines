@@ -8,8 +8,6 @@ spec:
     name: deploy-pipeline
   serviceAccountName: pipeline
   params:
-    - name: DOCKERFILE
-      value: 'Containerfile-SELinux'
     - name: URL
       value: https://github.com/salanisor/openshift-pipelines.git
     - name: git-revision

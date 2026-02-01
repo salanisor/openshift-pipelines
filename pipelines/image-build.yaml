@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: base-image-config-pipeline
@@ -7,6 +7,9 @@ spec:
   workspaces:
   - name: workspace-build
   params:
+  - name: SCRIPT
+    type: string
+    default: ""
   - name: image-tag
     type: string
     description: version of the newly built image
