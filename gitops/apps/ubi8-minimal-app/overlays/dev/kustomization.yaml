@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: pipelines-dev
+
+resources:  # Changed from 'bases'
+  - ../../base
+
+nameSuffix: -dev
+
+replicas:
+  - name: ubi8-minimal-app
+    count: 1
+
+images:
+  - name: quay.apps.ocp4.keights.org/openshift/base-images
+    newTag: ubi8-minimal-latest
+
+labels:  # Changed from 'commonLabels'
+  - pairs:
+      environment: dev
+    includeSelectors: true

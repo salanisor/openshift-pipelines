@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: pipelines
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - route.yaml
+
+labels:  # Changed from 'commonLabels'
+  - pairs:
+      app.kubernetes.io/name: ubi8-minimal-app
+      app.kubernetes.io/component: application
+    includeSelectors: true
+
+images:
+  - name: quay.apps.ocp4.keights.org/openshift/base-images
+    newTag: ubi8-minimal-latest

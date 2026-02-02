@@ -1,0 +1,40 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: pipelines-prod
+
+resources:  # Changed from 'bases'
+  - ../../base
+
+nameSuffix: -prod
+
+replicas:
+  - name: ubi8-minimal-app
+    count: 3
+
+images:
+  - name: quay.apps.ocp4.keights.org/openshift/base-images
+    newTag: ubi8-minimal-latest
+
+labels:  # Changed from 'commonLabels'
+  - pairs:
+      environment: prod
+    includeSelectors: true
+
+patches:
+  - target:
+      kind: Deployment
+      name: ubi8-minimal-app
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: 200m
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: 256Mi
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: 500m
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: 512Mi

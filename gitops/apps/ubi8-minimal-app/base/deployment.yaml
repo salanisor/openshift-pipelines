@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubi8-minimal-app
+  labels:
+    app: ubi8-minimal-app
+    app.kubernetes.io/name: ubi8-minimal-app
+    app.kubernetes.io/managed-by: argocd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubi8-minimal-app
+  template:
+    metadata:
+      labels:
+        app: ubi8-minimal-app
+        version: "1.0"  # This will be updated by pipeline
+      annotations:
+        # This annotation will trigger rolling updates
+        image-tag: "ubi8-minimal-latest"
+    spec:
+      serviceAccountName: ubi8-app-sa
+      imagePullSecrets:
+        - name: quay-registry-creds
+      containers:
+      - name: app
+        image: quay.apps.ocp4.keights.org/openshift/base-images:ubi8-minimal-latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        command: ["/bin/sh", "-c"]
+        args: 
+          - |
+            echo "Application started - version: ubi8-minimal-latest"
+            echo "SELinux context: $(cat /proc/self/attr/current)"
+            
+            # Simple HTTP server for health checks
+            while true; do
+              echo -e "HTTP/1.1 200 OK\n\nHealthy" | nc -l -p 8080 -q 1
+            done
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      securityContext:
+        runAsNonRoot: true
